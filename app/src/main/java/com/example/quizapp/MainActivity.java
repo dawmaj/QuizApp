@@ -24,12 +24,15 @@ import org.json.JSONObject;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
     private TextView questionField;
     private RequestQueue myRequest;
+    private List<String> questions = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,12 +55,15 @@ public class MainActivity extends AppCompatActivity {
                             JSONArray jsonArray = response.getJSONArray("results");
 
                             for (int i = 0; i < jsonArray.length(); i++) {
-                                JSONObject employee = jsonArray.getJSONObject(i);
+                                JSONObject listquestions = jsonArray.getJSONObject(i);
 
-                                String myQuestion = StringEscapeUtils.unescapeHtml4(employee.getString("question"));
-                                String question = URLDecoder.decode(myQuestion, StandardCharsets.US_ASCII.toString());
-                                System.out.println(question);
-                                questionField.append(question +"\n\n");
+                                String myQuestion = StringEscapeUtils.unescapeHtml4(listquestions.getString("question"));
+                                String correctanswers = StringEscapeUtils.unescapeHtml4(listquestions.getString("correct_answer"));
+
+                                questions.add(URLDecoder.decode(myQuestion, StandardCharsets.US_ASCII.toString()));
+
+                                //System.out.println(question);
+                                //questionField.append(question +"\n\n");
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -90,7 +96,9 @@ public class MainActivity extends AppCompatActivity {
             super.onBackPressed();
             return;
         }
-
+        for (int i = 0; i < questions.size(); i++) {
+            System.out.println(questions.get(i));
+        }
         this.doubleBackToExitPressedOnce = true;
         Toast.makeText(this, "Please click BACK again to exit", Toast.LENGTH_SHORT).show();
 
