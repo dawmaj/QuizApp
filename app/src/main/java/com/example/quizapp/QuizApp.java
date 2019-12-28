@@ -25,15 +25,19 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
-public class MainActivity extends AppCompatActivity {
+public class QuizApp extends AppCompatActivity {
     private TextView questionField;
     private RequestQueue myRequest;
-    private List<String> questions = new ArrayList<>();
-
+    private ArrayList<Question> questions = new ArrayList<>();
+    private ArrayList<Question> correctans = new ArrayList<>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,8 +46,11 @@ public class MainActivity extends AppCompatActivity {
         questionField = findViewById(R.id.Question);
         myRequest = Volley.newRequestQueue(this);
         jsonParse();
+        shuffleAnswers();
     }
 
+
+    //get all questions
     private void jsonParse() {
         String URL = "https://opentdb.com/api.php?amount=100&type=multiple&encoding=base64";
 
@@ -58,16 +65,37 @@ public class MainActivity extends AppCompatActivity {
                                 JSONObject listquestions = jsonArray.getJSONObject(i);
 
                                 String myQuestion = StringEscapeUtils.unescapeHtml4(listquestions.getString("question"));
-                                String correctanswers = StringEscapeUtils.unescapeHtml4(listquestions.getString("correct_answer"));
+                                String correctAnswer = StringEscapeUtils.unescapeHtml4(listquestions.getString("correct_answer"));
+                                String incorrectAnswers = listquestions.getString("incorrect_answers");
+                                JSONArray ans = new JSONArray(incorrectAnswers);
+                                String incorrectans1 = StringEscapeUtils.unescapeHtml4(ans.getString(0));
+                                String incorrectans2 = StringEscapeUtils.unescapeHtml4(ans.getString(1));
+                                String incorrectans3 = StringEscapeUtils.unescapeHtml4(ans.getString(2));
+                                Random rand = new Random();
 
-                                questions.add(URLDecoder.decode(myQuestion, StandardCharsets.US_ASCII.toString()));
+                                int  n = rand.nextInt(4) + 1;
 
-                                //System.out.println(question);
-                                //questionField.append(question +"\n\n");
+                                Question question =null;
+
+                                switch(n)
+                                {
+                                    case 1 : question = new Question(myQuestion,incorrectans1,incorrectans2,incorrectans3,correctAnswer);
+                                        break;
+                                    case 2 :  question = new Question(myQuestion,incorrectans3,correctAnswer,incorrectans1,incorrectans2);
+                                        break;
+                                    case 3 :  question = new Question(myQuestion,incorrectans3,correctAnswer,incorrectans2,incorrectans1);
+                                        break;
+                                    case 4 :  question = new Question(myQuestion,correctAnswer,incorrectans2,incorrectans1,incorrectans3);
+                                        break;
+
+                                }
+
+                                Question cq = new Question(myQuestion,correctAnswer);
+
+                                questions.add(question);
+                                correctans.add(cq);
                             }
                         } catch (JSONException e) {
-                            e.printStackTrace();
-                        } catch (UnsupportedEncodingException e) {
                             e.printStackTrace();
                         }
                     }
@@ -84,21 +112,23 @@ public class MainActivity extends AppCompatActivity {
                 return params;
             }
         };
-
-
         myRequest.add(request);
     }
-    boolean doubleBackToExitPressedOnce = false;
 
+
+    private void shuffleAnswers() {
+
+    }
+
+    //prevent to exit
+    boolean doubleBackToExitPressedOnce = false;
     @Override
     public void onBackPressed() {
         if (doubleBackToExitPressedOnce) {
             super.onBackPressed();
             return;
         }
-        for (int i = 0; i < questions.size(); i++) {
-            System.out.println(questions.get(i));
-        }
+        System.out.println(questions.get(5).getOPTA());
         this.doubleBackToExitPressedOnce = true;
         Toast.makeText(this, "Please click BACK again to exit", Toast.LENGTH_SHORT).show();
 
