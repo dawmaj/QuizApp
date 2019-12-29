@@ -28,11 +28,16 @@ import java.util.Map;
 import java.util.Random;
 
 public class QuizApp extends AppCompatActivity {
+    int score = 0;
+    int qid=0;
+    int qcount=0;
     private TextView questionField;
     Button opt1,opt2,opt3,opt4;
     private RequestQueue myRequest;
+    Question currentQ, cansQ;
     private ArrayList<Question> questions = new ArrayList<>();
     private ArrayList<Question> correctans = new ArrayList<>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,7 +54,7 @@ public class QuizApp extends AppCompatActivity {
 
 
     //get all questions
-    private void jsonParse() {
+    void jsonParse() {
         String URL = "https://opentdb.com/api.php?amount=100&type=multiple&encoding=base64";
 
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, URL, null,
@@ -89,10 +94,10 @@ public class QuizApp extends AppCompatActivity {
                                 }
 
                                 Question cq = new Question(myQuestion,correctAnswer);
-
                                 questions.add(question);
                                 correctans.add(cq);
                             }
+                            setQuestionList();
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -111,6 +116,19 @@ public class QuizApp extends AppCompatActivity {
             }
         };
         myRequest.add(request);
+    }
+
+    private void setQuestionList() {
+        currentQ = questions.get(qid);
+        cansQ = correctans.get(qid);
+
+        questionField.setText(currentQ.getQUESTION());
+        opt1.setText(currentQ.getOPTA());
+        opt2.setText(currentQ.getOPTB());
+        opt3.setText(currentQ.getOPTC());
+        opt4.setText(currentQ.getANSWER());
+        qcount++;
+        qid++;
     }
 
     //prevent to exit
