@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 import android.os.Handler;
+import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
@@ -31,7 +32,7 @@ public class QuizApp extends AppCompatActivity {
     int score = 0;
     int qid=0;
     int qcount=0;
-    private TextView questionField;
+    private TextView questionField,scores;
     Button opt1,opt2,opt3,opt4;
     private RequestQueue myRequest;
     Question currentQ, cansQ;
@@ -44,12 +45,57 @@ public class QuizApp extends AppCompatActivity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
         setContentView(R.layout.activity_main);
         questionField = findViewById(R.id.Question);
+        scores = findViewById(R.id.Score);
         opt1 =  findViewById(R.id.A_ans);
         opt2 =  findViewById(R.id.B_ans);
         opt3 =  findViewById(R.id.C_ans);
         opt4 =  findViewById(R.id.D_ans);
         myRequest = Volley.newRequestQueue(this);
         jsonParse();
+        opt1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                try{
+                    handleButtonClick(1);
+                }
+                catch (Exception err)
+                {
+                }
+            }
+        });
+        opt2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                try{
+                    handleButtonClick(2);
+                }
+                catch (Exception err)
+                {
+                }
+            }
+        });
+        opt3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                try{
+                    handleButtonClick(3);
+                }
+                catch (Exception err)
+                {
+                }
+            }
+        });
+        opt4.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                try{
+                    handleButtonClick(4);
+                }
+                catch (Exception err)
+                {
+                }
+            }
+        });
     }
 
 
@@ -63,7 +109,11 @@ public class QuizApp extends AppCompatActivity {
                     public void onResponse(JSONObject response) {
                         try {
                             JSONArray jsonArray = response.getJSONArray("results");
-
+                            qcount=0;
+                            qid=0;
+                            score = 0;
+                            questions.clear();
+                            correctans.clear();
                             for (int i = 0; i < jsonArray.length(); i++) {
                                 JSONObject listquestions = jsonArray.getJSONObject(i);
 
@@ -151,4 +201,81 @@ public class QuizApp extends AppCompatActivity {
             }
         }, 2000);
     }
+
+    void handleButtonClick(int b)
+    {
+        if(b==1)
+        {
+            if (opt1.getText().toString().equals(correctans.get(qid - 1).getANSWER())) {
+                score++;
+                scores.setText("SCORE: " + score);
+                setQuestionList();
+            }
+            if (opt1.getText().toString().equals(correctans.get(qid - 1).getANSWER()) && (qid >= 48) ) {
+                score++;
+                scores.setText("SCORE: " + score);
+                jsonParse();
+            }
+            else if (qid >= 48) {
+                jsonParse();
+            }
+            else
+                setQuestionList();
+        }
+
+        if(b==2)
+        {
+            if (opt2.getText().toString().equals(correctans.get(qid - 1).getANSWER())) {
+                score++;
+                scores.setText("SCORE: " + score);
+                setQuestionList();
+            }
+            if (opt2.getText().toString().equals(correctans.get(qid - 1).getANSWER()) && (qid >= 48) ) {
+                score++;
+                scores.setText("SCORE: " + score);
+                jsonParse();
+            }
+            else if (qid >= 48) {
+                jsonParse();
+            }
+            else
+                setQuestionList();
+        }
+        if(b==3)
+        {
+            if (opt3.getText().toString().equals(correctans.get(qid - 1).getANSWER())) {
+                score++;
+                scores.setText("SCORE: " + score);
+                setQuestionList();
+            }
+            if (opt3.getText().toString().equals(correctans.get(qid - 1).getANSWER()) && (qid >= 48) ) {
+                score++;
+                scores.setText("SCORE: " + score);
+                jsonParse();
+            }
+            else if (qid >= 48) {
+                jsonParse();
+            }
+            else
+                setQuestionList();
+        }
+        if(b==4) {
+            if (opt4.getText().toString().equals(correctans.get(qid - 1).getANSWER())) {
+                score++;
+                scores.setText("SCORE: " + score);
+                setQuestionList();
+            }
+            if (opt4.getText().toString().equals(correctans.get(qid - 1).getANSWER()) && (qid >= 48) ) {
+                score++;
+                scores.setText("SCORE: " + score);
+                jsonParse();
+            }
+            else if (qid >= 48) {
+                jsonParse();
+            }
+            else
+                setQuestionList();
+        }
+    }
+
 }
