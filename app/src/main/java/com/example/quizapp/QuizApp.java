@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -21,20 +22,14 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
 public class QuizApp extends AppCompatActivity {
     private TextView questionField;
+    Button opt1,opt2,opt3,opt4;
     private RequestQueue myRequest;
     private ArrayList<Question> questions = new ArrayList<>();
     private ArrayList<Question> correctans = new ArrayList<>();
@@ -44,9 +39,12 @@ public class QuizApp extends AppCompatActivity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
         setContentView(R.layout.activity_main);
         questionField = findViewById(R.id.Question);
+        opt1 =  findViewById(R.id.A_ans);
+        opt2 =  findViewById(R.id.B_ans);
+        opt3 =  findViewById(R.id.C_ans);
+        opt4 =  findViewById(R.id.D_ans);
         myRequest = Volley.newRequestQueue(this);
         jsonParse();
-        shuffleAnswers();
     }
 
 
@@ -113,11 +111,6 @@ public class QuizApp extends AppCompatActivity {
             }
         };
         myRequest.add(request);
-    }
-
-
-    private void shuffleAnswers() {
-
     }
 
     //prevent to exit
