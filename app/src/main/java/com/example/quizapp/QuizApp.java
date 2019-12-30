@@ -2,6 +2,7 @@ package com.example.quizapp;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
@@ -33,7 +34,7 @@ public class QuizApp extends AppCompatActivity {
     int qid=0;
     int qcount=0;
     private TextView questionField,scores;
-    Button opt1,opt2,opt3,opt4;
+    Button opt1,opt2,opt3,opt4, musicq, pictureq;
     private RequestQueue myRequest;
     Question currentQ, cansQ;
     private ArrayList<Question> questions = new ArrayList<>();
@@ -50,8 +51,34 @@ public class QuizApp extends AppCompatActivity {
         opt2 =  findViewById(R.id.B_ans);
         opt3 =  findViewById(R.id.C_ans);
         opt4 =  findViewById(R.id.D_ans);
+        musicq = findViewById(R.id.Music_q);
+        pictureq = findViewById(R.id.Picture_q);
         myRequest = Volley.newRequestQueue(this);
         jsonParse();
+        musicq.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                try{
+                    openMusicQuiz();
+                }
+                catch (Exception err)
+                {
+                }
+            }
+        });
+
+        pictureq.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                try{
+                    openPictureQuiz();
+                }
+                catch (Exception err)
+                {
+                }
+            }
+        });
+
         opt1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -63,6 +90,7 @@ public class QuizApp extends AppCompatActivity {
                 }
             }
         });
+
         opt2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -74,6 +102,7 @@ public class QuizApp extends AppCompatActivity {
                 }
             }
         });
+
         opt3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -85,6 +114,7 @@ public class QuizApp extends AppCompatActivity {
                 }
             }
         });
+
         opt4.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -99,6 +129,15 @@ public class QuizApp extends AppCompatActivity {
     }
 
 
+    void openMusicQuiz(){
+        Intent intent = new Intent(this, MusicQuestions.class);
+        startActivity(intent);
+    }
+
+    void openPictureQuiz() {
+        Intent intent = new Intent(this, PictureQuestions.class);
+        startActivity(intent);
+    }
     //get all questions
     void jsonParse() {
         String URL = "https://opentdb.com/api.php?amount=100&type=multiple&encoding=base64";
@@ -167,7 +206,7 @@ public class QuizApp extends AppCompatActivity {
         };
         myRequest.add(request);
     }
-
+    //get questions list
     private void setQuestionList() {
         currentQ = questions.get(qid);
         cansQ = correctans.get(qid);
@@ -202,8 +241,8 @@ public class QuizApp extends AppCompatActivity {
         }, 2000);
     }
 
-    void handleButtonClick(int b)
-    {
+    //quiz logic
+    void handleButtonClick(int b) {
         if(b==1)
         {
             if (opt1.getText().toString().equals(correctans.get(qid - 1).getANSWER())) {
