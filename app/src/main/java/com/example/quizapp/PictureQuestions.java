@@ -3,13 +3,20 @@ package com.example.quizapp;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.PorterDuff;
+import android.media.Image;
 import android.os.Bundle;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.ImageView;
 
 public class PictureQuestions extends AppCompatActivity {
     Button opt1,opt2,opt3,opt4, textq, musicq;
+    ImageView img;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -17,7 +24,10 @@ public class PictureQuestions extends AppCompatActivity {
         setContentView(R.layout.activity_picture_questions);
         textq = findViewById(R.id.Text_q);
         musicq = findViewById(R.id.Music_q);
-
+        ImageView img = findViewById(R.id.image);
+        Bitmap bmap = addWaterMark(BitmapFactory.decodeResource(getResources(), R.drawable.image1));
+        //Bitmap watermarkInImage = addWaterMark(bmap);
+        img.setImageBitmap(bmap);
         textq.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -46,6 +56,30 @@ public class PictureQuestions extends AppCompatActivity {
     void openTextQuiz(){
         Intent intent = new Intent(this, QuizApp.class);
         startActivity(intent);
+    }
+
+    private Bitmap addWaterMark(Bitmap src) {
+        int w = src.getWidth();
+        int h = src.getHeight();
+        Bitmap result = Bitmap.createBitmap(w, h, src.getConfig());
+        Canvas canvas = new Canvas(result);
+        canvas.drawBitmap(src, 0, 0, null);
+
+        Bitmap waterMark = adjustOpacity(BitmapFactory.decodeResource(getResources(), R.drawable.frame),10);
+        canvas.drawBitmap(waterMark, 0, 0, null);
+
+        return result;
+    }
+
+    private Bitmap adjustOpacity(Bitmap bitmap, int opacity)
+    {
+        Bitmap mutableBitmap = bitmap.isMutable()
+                ? bitmap
+                : bitmap.copy(Bitmap.Config.ARGB_8888, true);
+        Canvas canvas = new Canvas(mutableBitmap);
+        int colour = (opacity & 0xFF) << 24;
+        canvas.drawColor(colour, PorterDuff.Mode.DST_IN);
+        return mutableBitmap;
     }
 
     void openMusicQuiz() {
