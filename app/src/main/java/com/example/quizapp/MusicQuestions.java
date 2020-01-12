@@ -9,6 +9,8 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 
+import java.util.Random;
+
 public class MusicQuestions extends AppCompatActivity {
     MediaPlayer player;
     float pitch = 0.95f;
@@ -47,14 +49,47 @@ public class MusicQuestions extends AppCompatActivity {
     }
 
     void playSound() {
+        Random rand = new Random();
+        int  n = rand.nextInt(5) + 1;
         if (player == null) {
-            player = MediaPlayer.create(this, R.raw.music1);
-            player.setPlaybackParams(player.getPlaybackParams().setPitch(pitch));
+            switch(n)
+            {
+                case 1:  player = MediaPlayer.create(this, R.raw.music1);
+                    player.setPlaybackParams(player.getPlaybackParams().setPitch(pitch));
+                    break;
+                case 2: player = MediaPlayer.create(this, R.raw.music2);
+                    player.setPlaybackParams(player.getPlaybackParams().setPitch(pitch));
+                    break;
+                case 3: player = MediaPlayer.create(this, R.raw.music3);
+                    player.setPlaybackParams(player.getPlaybackParams().setPitch(pitch));
+                    break;
+                case 4: player = MediaPlayer.create(this, R.raw.music4);
+                    player.setPlaybackParams(player.getPlaybackParams().setPitch(pitch));
+                    break;
+                case 5: player = MediaPlayer.create(this, R.raw.music5);
+                    player.setPlaybackParams(player.getPlaybackParams().setPitch(pitch));
+                    break;
+            }
         }
         else {
-            player = null;
-            player = MediaPlayer.create(this, R.raw.music1);
-            player.setPlaybackParams(player.getPlaybackParams().setPitch(pitch));
+            player = null;switch(n)
+            {
+                case 1:  player = MediaPlayer.create(this, R.raw.music1);
+                    player.setPlaybackParams(player.getPlaybackParams().setPitch(pitch));
+                    break;
+                case 2: player = MediaPlayer.create(this, R.raw.music2);
+                    player.setPlaybackParams(player.getPlaybackParams().setPitch(pitch));
+                    break;
+                case 3: player = MediaPlayer.create(this, R.raw.music3);
+                    player.setPlaybackParams(player.getPlaybackParams().setPitch(pitch));
+                    break;
+                case 4: player = MediaPlayer.create(this, R.raw.music4);
+                    player.setPlaybackParams(player.getPlaybackParams().setPitch(pitch));
+                    break;
+                case 5: player = MediaPlayer.create(this, R.raw.music5);
+                    player.setPlaybackParams(player.getPlaybackParams().setPitch(pitch));
+                    break;
+            }
         }
         player.start();
     }

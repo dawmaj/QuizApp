@@ -14,6 +14,8 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
 
+import java.util.Random;
+
 public class PictureQuestions extends AppCompatActivity {
     Button opt1,opt2,opt3,opt4, textq, musicq;
     ImageView img;
@@ -25,9 +27,28 @@ public class PictureQuestions extends AppCompatActivity {
         textq = findViewById(R.id.Text_q);
         musicq = findViewById(R.id.Music_q);
         ImageView img = findViewById(R.id.image);
-        Bitmap bmap = addWaterMark(BitmapFactory.decodeResource(getResources(), R.drawable.image1));
+        Random rand = new Random();
+        int  n = rand.nextInt(5) + 1;
+        switch(n)
+        {
+            case 1:  Bitmap bmap = addWaterMark(BitmapFactory.decodeResource(getResources(), R.drawable.image1));
+                img.setImageBitmap(bmap);
+                break;
+            case 2: Bitmap bm = addWaterMark(BitmapFactory.decodeResource(getResources(), R.drawable.image2));
+                img.setImageBitmap(bm);
+                break;
+            case 3: Bitmap BM = addWaterMark(BitmapFactory.decodeResource(getResources(), R.drawable.image3));
+                img.setImageBitmap(BM);
+                break;
+            case 4: Bitmap bitmap = addWaterMark(BitmapFactory.decodeResource(getResources(), R.drawable.image4));
+                img.setImageBitmap(bitmap);
+                break;
+            case 5: Bitmap bitm = addWaterMark(BitmapFactory.decodeResource(getResources(), R.drawable.image5));
+                img.setImageBitmap(bitm);
+                break;
+        }
         //Bitmap watermarkInImage = addWaterMark(bmap);
-        img.setImageBitmap(bmap);
+        //img.setImageBitmap(bmap);
         textq.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -64,10 +85,8 @@ public class PictureQuestions extends AppCompatActivity {
         Bitmap result = Bitmap.createBitmap(w, h, src.getConfig());
         Canvas canvas = new Canvas(result);
         canvas.drawBitmap(src, 0, 0, null);
-
         Bitmap waterMark = adjustOpacity(BitmapFactory.decodeResource(getResources(), R.drawable.frame),10);
         canvas.drawBitmap(waterMark, 0, 0, null);
-
         return result;
     }
 
