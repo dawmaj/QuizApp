@@ -24,7 +24,6 @@ import java.util.Random;
 
 public class PictureQuestions extends AppCompatActivity {
     Button opt1,opt2,opt3,opt4, textq, musicq;
-    QuizApp quiz;
     private TextView questionField,scores;
     private ImageView img;
     int score = 0;
@@ -129,7 +128,7 @@ public class PictureQuestions extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 try{
-                    quiz.handleButtonClick(2);
+                    handleButtonClick(2);
                 }
                 catch (Exception err)
                 {
@@ -242,11 +241,11 @@ public class PictureQuestions extends AppCompatActivity {
                 scores.setText("SCORE: " + score);
                 setList();
             }
-            if (opt1.getText().toString().equals(correctans.get(qid - 1).getANSWER()) && (qid >= 48) ) {
+            if (opt1.getText().toString().equals(correctans.get(qid - 1).getANSWER()) && (qid >= 10) ) {
                 score++;
                 scores.setText("SCORE: " + score);
             }
-            else if (qid >= 48) {
+            else if (qid >= 10) {
                 setList();
             }
             else
@@ -260,12 +259,12 @@ public class PictureQuestions extends AppCompatActivity {
                 scores.setText("SCORE: " + score);
                 setList();
             }
-            if (opt2.getText().toString().equals(correctans.get(qid - 1).getANSWER()) && (qid >= 48) ) {
+            if (opt2.getText().toString().equals(correctans.get(qid - 1).getANSWER()) && (qid >= 10) ) {
                 score++;
                 scores.setText("SCORE: " + score);
                 setList();
             }
-            else if (qid >= 48) {
+            else if (qid >= 10) {
                 setList();
             }
             else
@@ -278,12 +277,12 @@ public class PictureQuestions extends AppCompatActivity {
                 scores.setText("SCORE: " + score);
                 setList();
             }
-            if (opt3.getText().toString().equals(correctans.get(qid - 1).getANSWER()) && (qid >= 48) ) {
+            if (opt3.getText().toString().equals(correctans.get(qid - 1).getANSWER()) && (qid >= 10) ) {
                 score++;
                 scores.setText("SCORE: " + score);
                 setList();
             }
-            else if (qid >= 48) {
+            else if (qid >= 10) {
                 setList();
             }
             else
@@ -295,12 +294,12 @@ public class PictureQuestions extends AppCompatActivity {
                 scores.setText("SCORE: " + score);
                 setList();
             }
-            if (opt4.getText().toString().equals(correctans.get(qid - 1).getANSWER()) && (qid >= 48) ) {
+            if (opt4.getText().toString().equals(correctans.get(qid - 1).getANSWER()) && (qid >= 10) ) {
                 score++;
                 scores.setText("SCORE: " + score);
                 setList();
             }
-            else if (qid >= 48) {
+            else if (qid >= 10) {
                 setList();
             }
             else
