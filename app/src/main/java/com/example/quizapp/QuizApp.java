@@ -171,6 +171,8 @@ public class QuizApp extends AppCompatActivity {
 
                                 switch(n)
                                 {
+                                    case 0 : question = new Question(myQuestion,incorrectans3,incorrectans2,incorrectans1,correctAnswer);
+                                        break;
                                     case 1 : question = new Question(myQuestion,incorrectans1,incorrectans2,incorrectans3,correctAnswer);
                                         break;
                                     case 2 :  question = new Question(myQuestion,incorrectans3,correctAnswer,incorrectans1,incorrectans2);
