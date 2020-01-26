@@ -182,15 +182,15 @@ public class PictureQuestions extends AppCompatActivity {
     private Bitmap addWaterMark(Bitmap src) {
         SQLiteDatabase db = connect.getInstance(this).getReadableDatabase("test");
         int w = src.getWidth();
-        int i = 0, watermark = 0;
-        Integer water [] = new Integer[3];
         int h = src.getHeight();
+        int i = 0, watermark = 0;
+        Integer water [] = new Integer[6];
         Bitmap result = Bitmap.createBitmap(w, h, src.getConfig());
         Canvas canvas = new Canvas(result);
         canvas.drawBitmap(src, 0, 0, null);
         String selectQuery = "SELECT * FROM " + Quiz.WATERMARKS_TABLE;
         Cursor cursor = db.rawQuery(selectQuery, null);
-        int  n = new SecureRandom().nextInt(3);
+        int  n = new SecureRandom().nextInt(5);
         if (cursor.moveToFirst()) {
             do {
                 water[i] = cursor.getInt(cursor.getColumnIndex(Quiz.COLUMN_WATERMARK));
@@ -200,21 +200,24 @@ public class PictureQuestions extends AppCompatActivity {
         switch(n)
         {
             case 0 :
-                Bitmap waterMark = adjustOpacity(BitmapFactory.decodeResource(getResources(), water[0]),10);
-                canvas.drawBitmap(waterMark, 0, 0, null);
+                canvas.drawBitmap(adjustOpacity(BitmapFactory.decodeResource(getResources(), water[0]),10), 0, 0, null);
                 return result;
             case 1 :
-                Bitmap mark = adjustOpacity(BitmapFactory.decodeResource(getResources(), water[1]),10);
-                canvas.drawBitmap(mark, 0, 0, null);
+                canvas.drawBitmap(adjustOpacity(BitmapFactory.decodeResource(getResources(), water[1]),10), 0, 0, null);
                 return result;
             case 2 :
-                Bitmap waterM = adjustOpacity(BitmapFactory.decodeResource(getResources(), water[2]),10);
-                canvas.drawBitmap(waterM, 0, 0, null);
+                canvas.drawBitmap(adjustOpacity(BitmapFactory.decodeResource(getResources(), water[2]),10), 0, 0, null);
+                return result;
+            case 3 :
+                canvas.drawBitmap(adjustOpacity(BitmapFactory.decodeResource(getResources(), water[3]),10), 0, 0, null);
+                return result;
+            case 4 :
+                canvas.drawBitmap(adjustOpacity(BitmapFactory.decodeResource(getResources(), water[4]),10), 0, 0, null);
+                return result;
+            default :
+                canvas.drawBitmap(adjustOpacity(BitmapFactory.decodeResource(getResources(), R.drawable.frame),10), 0, 0, null);
                 return result;
         }
-        Bitmap waterMark = adjustOpacity(BitmapFactory.decodeResource(getResources(), R.drawable.frame),10);
-        canvas.drawBitmap(waterMark, 0, 0, null);
-        return result;
     }
 
     private Bitmap adjustOpacity(Bitmap bitmap, int opacity)

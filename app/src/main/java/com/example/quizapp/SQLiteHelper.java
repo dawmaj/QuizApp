@@ -65,7 +65,7 @@ public class SQLiteHelper extends SQLiteOpenHelper {
         Question a2 = new Question("", "Jan Matejko");
         addAns(a2, "p");
         addQuestion(q2);
-        Question q3 = new Question("What nationality have this forme ski jumper?", "Finland", "Poland", "Slovenia" ,
+        Question q3 = new Question("What nationality have this former ski jumper?", "Finland", "Poland", "Slovenia" ,
                 "Norway","p",R.drawable.image3, 0);
         Question a3 = new Question("", "Norway");
         addAns(a3, "p");
@@ -109,12 +109,11 @@ public class SQLiteHelper extends SQLiteOpenHelper {
 
     private void fillWatermarks()
     {
-        int w1 = R.drawable.frame;
-        int w2 = R.drawable.frame2;
-        int w3 = R.drawable.frame3;
-        addWater(w1);
-        addWater(w2);
-        addWater(w3);
+        addWater(R.drawable.frame);
+        addWater(R.drawable.frame2);
+        addWater(R.drawable.frame3);
+        addWater(R.drawable.frame4);
+        addWater(R.drawable.frame5);
     }
 
     static public synchronized SQLiteHelper getInstance(Context context) {

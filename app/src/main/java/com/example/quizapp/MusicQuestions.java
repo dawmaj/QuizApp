@@ -175,6 +175,12 @@ public class MusicQuestions extends AppCompatActivity {
             player = MediaPlayer.create(this, id);
             player.setPlaybackParams(player.getPlaybackParams().setPitch(pitch));
         }
+        else
+        {
+            player = null;
+            player = MediaPlayer.create(this, id);
+            player.setPlaybackParams(player.getPlaybackParams().setPitch(pitch));
+        }
         player.start();
     }
 
