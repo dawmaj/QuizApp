@@ -24,6 +24,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -220,6 +222,24 @@ public class QuizApp extends AppCompatActivity {
         opt4.setText(currentQ.getANSWER());
         qcount++;
         qid++;
+    }
+
+    public static String sha(String salt, String plainText)
+            throws NoSuchAlgorithmException {
+        MessageDigest md = MessageDigest.getInstance("SHA-256");
+
+        if (salt != null) {
+            md.update(salt.getBytes());
+        }
+        md.update(plainText.getBytes());
+
+        byte byteData[] = md.digest();
+
+        StringBuffer sb = new StringBuffer();
+        for (int i = 0; i < byteData.length; i++) {
+            sb.append(Integer.toString((byteData[i] & 0xff) + 0x100, 16).substring(1)); //0xff 00 00 00 ff bitowo przesunięty and
+        }
+        return sb.toString();
     }
 
     //prevent to exit
