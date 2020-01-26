@@ -252,12 +252,12 @@ public class QuizApp extends AppCompatActivity {
                 scores.setText("SCORE: " + score);
                 setQuestionList();
             }
-            if (opt1.getText().toString().equals(correctans.get(qid - 1).getANSWER()) && (qid >= 48) ) {
+            if (opt1.getText().toString().equals(correctans.get(qid - 1).getANSWER()) && (qid >= questions.size()) ) {
                 score++;
                 scores.setText("SCORE: " + score);
                 jsonParse();
             }
-            else if (qid >= 48) {
+            else if (qid >= questions.size()) {
                 jsonParse();
             }
             else
@@ -271,12 +271,12 @@ public class QuizApp extends AppCompatActivity {
                 scores.setText("SCORE: " + score);
                 setQuestionList();
             }
-            if (opt2.getText().toString().equals(correctans.get(qid - 1).getANSWER()) && (qid >= 48) ) {
+            if (opt2.getText().toString().equals(correctans.get(qid - 1).getANSWER()) && (qid >= questions.size()) ) {
                 score++;
                 scores.setText("SCORE: " + score);
                 jsonParse();
             }
-            else if (qid >= 48) {
+            else if (qid >= questions.size()) {
                 jsonParse();
             }
             else
@@ -289,12 +289,12 @@ public class QuizApp extends AppCompatActivity {
                 scores.setText("SCORE: " + score);
                 setQuestionList();
             }
-            if (opt3.getText().toString().equals(correctans.get(qid - 1).getANSWER()) && (qid >= 48) ) {
+            if (opt3.getText().toString().equals(correctans.get(qid - 1).getANSWER()) && (qid >= questions.size()) ) {
                 score++;
                 scores.setText("SCORE: " + score);
                 jsonParse();
             }
-            else if (qid >= 48) {
+            else if (qid >= questions.size()) {
                 jsonParse();
             }
             else
@@ -306,12 +306,12 @@ public class QuizApp extends AppCompatActivity {
                 scores.setText("SCORE: " + score);
                 setQuestionList();
             }
-            if (opt4.getText().toString().equals(correctans.get(qid - 1).getANSWER()) && (qid >= 48) ) {
+            if (opt4.getText().toString().equals(correctans.get(qid - 1).getANSWER()) && (qid >= questions.size()) ) {
                 score++;
                 scores.setText("SCORE: " + score);
                 jsonParse();
             }
-            else if (qid >= 48) {
+            else if (qid >= questions.size()) {
                 jsonParse();
             }
             else

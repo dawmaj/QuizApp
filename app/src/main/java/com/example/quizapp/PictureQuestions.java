@@ -13,6 +13,7 @@ import android.graphics.PorterDuff;
 import android.media.Image;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.SystemClock;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
@@ -38,9 +39,6 @@ public class PictureQuestions extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
-        connect = new SQLiteHelper(this);
-        System.out.println("CONNECTION: " + connect);
         setContentView(R.layout.activity_picture_questions);
         img = findViewById(R.id.image);
         questionField = findViewById(R.id.Question);
@@ -51,46 +49,7 @@ public class PictureQuestions extends AppCompatActivity {
         opt4 =  findViewById(R.id.D_ans);
         textq = findViewById(R.id.Text_q);
         musicq = findViewById(R.id.Music_q);
-        SQLiteDatabase.loadLibs(this);;
-        questions.clear();
-        correctans.clear();
-        Random rand = new SecureRandom();
-
-        SQLiteDatabase db = connect.getInstance(this).getReadableDatabase("test");
-        String selectQuery = "SELECT * FROM " + Quiz.QUIZ_TABLE_NAME + " WHERE " + Quiz.COLUMN_TYPE + "='p'";
-        Cursor cursor = db.rawQuery(selectQuery, null);
-
-        if (cursor.moveToFirst()) {
-            do {
-                String q = cursor.getString(cursor.getColumnIndex(Quiz.COLUMN_QUESTION));
-                String ans =  cursor.getString(cursor.getColumnIndex(Quiz.COLUMN_OPTION4));
-                String ans1 = cursor.getString(cursor.getColumnIndex(Quiz.COLUMN_OPTION1));
-                String ans2 = cursor.getString(cursor.getColumnIndex(Quiz.COLUMN_OPTION2));
-                String ans3 = cursor.getString(cursor.getColumnIndex(Quiz.COLUMN_OPTION3));
-                Integer id = cursor.getInt(cursor.getColumnIndex(Quiz.COLUMN_IMAGE));
-                int  n = rand.nextInt(4);
-
-                Question question =null;
-
-                switch(n)
-                {
-                    case 1 : question = new Question(q,ans2,ans1,ans3,ans,id);
-                        break;
-                    case 2 :  question = new Question(q,ans1,ans,ans3,ans2,id);
-                        break;
-                    case 3 :  question = new Question(q,ans3,ans,ans1,ans2,id);
-                        break;
-                    case 4 :  question = new Question(q,ans,ans2,ans3,ans1,id);
-                        break;
-                }
-
-                Question cq = new Question(q,ans);
-                questions.add(question);
-                correctans.add(cq);
-            } while (cursor.moveToNext());
-        }
-        setList();
-        int  n = rand.nextInt(5) + 1;
+        getQuestions();
         textq.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -162,7 +121,54 @@ public class PictureQuestions extends AppCompatActivity {
             }
         });
     }
+    void getQuestions() {
+        connect = new SQLiteHelper(this);
+        SQLiteDatabase.loadLibs(this);
+        qcount=0;
+        qid=0;
+        score = 0;
+        questions.clear();
+        correctans.clear();
+        Random rand = new SecureRandom();
+        byte bytes[] = new byte[512];
+        rand.nextBytes(bytes);
+        String hash = bytes.toString();
+        String secret = hash;
+        SQLiteDatabase db = connect.getInstance(this).getReadableDatabase(secret);
+        String selectQuery = "SELECT * FROM " + Quiz.QUIZ_TABLE_NAME + " WHERE " + Quiz.COLUMN_TYPE + "='p'";
+        Cursor cursor = db.rawQuery(selectQuery, null);
 
+        if (cursor.moveToFirst()) {
+            do {
+                String q = cursor.getString(cursor.getColumnIndex(Quiz.COLUMN_QUESTION));
+                String ans =  cursor.getString(cursor.getColumnIndex(Quiz.COLUMN_OPTION4));
+                String ans1 = cursor.getString(cursor.getColumnIndex(Quiz.COLUMN_OPTION1));
+                String ans2 = cursor.getString(cursor.getColumnIndex(Quiz.COLUMN_OPTION2));
+                String ans3 = cursor.getString(cursor.getColumnIndex(Quiz.COLUMN_OPTION3));
+                Integer id = cursor.getInt(cursor.getColumnIndex(Quiz.COLUMN_IMAGE));
+                int  n = rand.nextInt(4);
+
+                Question question =null;
+
+                switch(n)
+                {
+                    case 1 : question = new Question(q,ans2,ans1,ans3,ans,id);
+                        break;
+                    case 2 :  question = new Question(q,ans1,ans,ans3,ans2,id);
+                        break;
+                    case 3 :  question = new Question(q,ans3,ans,ans1,ans2,id);
+                        break;
+                    case 4 :  question = new Question(q,ans,ans2,ans3,ans1,id);
+                        break;
+                }
+
+                Question cq = new Question(q,ans);
+                questions.add(question);
+                correctans.add(cq);
+            } while (cursor.moveToNext());
+        }
+        setList();
+    }
     void setList() {
         currentQ = questions.get(qid);
         cansQ = correctans.get(qid);
@@ -185,7 +191,7 @@ public class PictureQuestions extends AppCompatActivity {
         SQLiteDatabase db = connect.getInstance(this).getReadableDatabase("test");
         int w = src.getWidth();
         int h = src.getHeight();
-        int i = 0, watermark = 0;
+        int i = 0;
         Integer water [] = new Integer[6];
         Bitmap result = Bitmap.createBitmap(w, h, src.getConfig());
         Canvas canvas = new Canvas(result);
@@ -233,27 +239,6 @@ public class PictureQuestions extends AppCompatActivity {
         return mutableBitmap;
     }
 
-    //prevent to exit
-    boolean doubleBackToExitPressedOnce = false;
-    @Override
-    public void onBackPressed() {
-        if (doubleBackToExitPressedOnce) {
-            super.onBackPressed();
-            return;
-        }
-        System.out.println(questions.get(5).getOPTA());
-        this.doubleBackToExitPressedOnce = true;
-        Toast.makeText(this, "Please click BACK again to exit", Toast.LENGTH_SHORT).show();
-
-        new Handler().postDelayed(new Runnable() {
-
-            @Override
-            public void run() {
-                doubleBackToExitPressedOnce=false;
-            }
-        }, 2000);
-    }
-
     void openMusicQuiz() {
         Intent intent = new Intent(this, MusicQuestions.class);
         startActivity(intent);
@@ -267,12 +252,13 @@ public class PictureQuestions extends AppCompatActivity {
                 scores.setText("SCORE: " + score);
                 setList();
             }
-            if (opt1.getText().toString().equals(correctans.get(qid - 1).getANSWER()) && (qid >= 10) ) {
+            if (opt1.getText().toString().equals(correctans.get(qid - 1).getANSWER()) && (qid >= questions.size()) ) {
                 score++;
                 scores.setText("SCORE: " + score);
+                getQuestions();
             }
-            else if (qid >= 10) {
-                setList();
+            else if (qid >= questions.size()) {
+                getQuestions();
             }
             else
                 setList();
@@ -285,13 +271,13 @@ public class PictureQuestions extends AppCompatActivity {
                 scores.setText("SCORE: " + score);
                 setList();
             }
-            if (opt2.getText().toString().equals(correctans.get(qid - 1).getANSWER()) && (qid >= 10) ) {
+            if (opt2.getText().toString().equals(correctans.get(qid - 1).getANSWER()) && (qid >= questions.size()) ) {
                 score++;
                 scores.setText("SCORE: " + score);
-                setList();
+                getQuestions();
             }
-            else if (qid >= 10) {
-                setList();
+            else if (qid >= questions.size()) {
+                getQuestions();
             }
             else
                 setList();
@@ -303,13 +289,13 @@ public class PictureQuestions extends AppCompatActivity {
                 scores.setText("SCORE: " + score);
                 setList();
             }
-            if (opt3.getText().toString().equals(correctans.get(qid - 1).getANSWER()) && (qid >= 10) ) {
+            if (opt3.getText().toString().equals(correctans.get(qid - 1).getANSWER()) && (qid >= questions.size()) ) {
                 score++;
                 scores.setText("SCORE: " + score);
-                setList();
+                getQuestions();
             }
-            else if (qid >= 10) {
-                setList();
+            else if (qid >= questions.size()) {
+                getQuestions();
             }
             else
                 setList();
@@ -320,13 +306,13 @@ public class PictureQuestions extends AppCompatActivity {
                 scores.setText("SCORE: " + score);
                 setList();
             }
-            if (opt4.getText().toString().equals(correctans.get(qid - 1).getANSWER()) && (qid >= 10) ) {
+            if (opt4.getText().toString().equals(correctans.get(qid - 1).getANSWER()) && (qid >= questions.size()) ) {
                 score++;
                 scores.setText("SCORE: " + score);
-                setList();
+                getQuestions();
             }
-            else if (qid >= 10) {
-                setList();
+            else if (qid >= questions.size()) {
+                getQuestions();
             }
             else
                 setList();
