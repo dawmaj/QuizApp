@@ -9,7 +9,6 @@ import androidx.annotation.Nullable;
 
 public class SQLiteHelper extends SQLiteOpenHelper {
 
-    Context context;
     private static SQLiteHelper instance;
     private static String DB_NAME = "quiz.db";
     private static int DB_VER = 1;
