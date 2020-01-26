@@ -19,7 +19,8 @@ import java.util.Random;
 
 public class MusicQuestions extends AppCompatActivity {
     MediaPlayer player;
-    float pitch = 0.95f;
+    Random r= new SecureRandom();
+    float pitch = 0.85f + r.nextFloat() * (0.95f - 0.85f);
     private TextView questionField,scores;
     Button opt1,opt2,opt3,opt4, textq, pictureq;
     SQLiteHelper connect;
