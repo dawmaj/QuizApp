@@ -28,6 +28,7 @@ public class PictureQuestions extends AppCompatActivity {
     int qid=0;
     int qcount=0;
     SQLiteHelper connect;
+    String secret;
     Question currentQ, cansQ;
     private ArrayList<Question> questions = new ArrayList<>();
     private ArrayList<Question> correctans = new ArrayList<>();
@@ -128,10 +129,9 @@ public class PictureQuestions extends AppCompatActivity {
         Random rand = new SecureRandom();
         byte bytes[] = new byte[512];
         rand.nextBytes(bytes);
-        String hash = bytes.toString();
-        String secret = hash;
+        secret = bytes.toString();
         SQLiteDatabase db = connect.getInstance(this).getReadableDatabase(secret);
-        String selectQuery = "SELECT * FROM " + Quiz.QUIZ_TABLE_NAME + " WHERE " + Quiz.COLUMN_TYPE + "='p'";
+        String selectQuery = "SELECT * FROM " + Quiz.QUIZ_TABLE_NAME + " WHERE " + Quiz.COLUMN_TYPE + "='p' ORDER BY RAND()";
         Cursor cursor = db.rawQuery(selectQuery, null);
 
         if (cursor.moveToFirst()) {

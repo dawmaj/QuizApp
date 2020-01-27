@@ -19,6 +19,7 @@ import java.util.Random;
 
 public class MusicQuestions extends AppCompatActivity {
     MediaPlayer player;
+    PictureQuestions quiz;
     Random r= new SecureRandom();
     float pitch = 0.85f + r.nextFloat() * (0.95f - 0.85f);
     private TextView questionField,scores;
@@ -126,11 +127,7 @@ public class MusicQuestions extends AppCompatActivity {
         questions.clear();
         correctans.clear();
         Random rand = new SecureRandom();
-        byte bytes[] = new byte[512];
-        rand.nextBytes(bytes);
-        String hash = bytes.toString();
-        String secret = hash;
-        SQLiteDatabase db = connect.getInstance(this).getReadableDatabase(secret);
+        SQLiteDatabase db = connect.getInstance(this).getReadableDatabase(quiz.secret);
         String selectQuery = "SELECT * FROM " + Quiz.QUIZ_TABLE_NAME + " WHERE " + Quiz.COLUMN_TYPE + "='m'";
         Cursor cursor = db.rawQuery(selectQuery, null);
         if (cursor.moveToFirst()) {
